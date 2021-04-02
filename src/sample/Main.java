@@ -16,11 +16,11 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Main extends Application {
+public class Main { //extends Application {
 
     private static Button button;
 
-    @Override // использовать пока не будем
+    //@Override // использовать пока не будем
     public void start(Stage primaryStage) throws Exception{
         /*
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
@@ -29,18 +29,6 @@ public class Main extends Application {
         primaryStage.show();
 
          */
-    }
-
-    public static void main(String[] args) {
-        //launch(args);
-
-        // Метод invokeLater говорит, что нужно обновить GUI поток. Он будет выполняться асинхронно с AWT.
-        SwingUtilities.invokeLater(new Runnable() { //с новым поток
-            @Override
-            public void run() {
-                show(); // запускаем метод show
-            }
-        });
     }
 
     private static void show() { // метод show
@@ -52,13 +40,10 @@ public class Main extends Application {
         JButton moveRight = new JButton("Move >>");
         jPanel.add(moveLeft); //  размещаем на панели
         jPanel.add(moveRight);
-        jPanel.add(panel); // добавляем панель с FX компонентами
-        jPanel.setAlignmentX(300); // размеры
-        jPanel.setAlignmentY(150);
-        jPanel.setSize(400,300);
-        jPanel.setVisible(true); // видимый
 
-        frame.add(panel); // добавляем панель на фрэйм
+        jPanel.add(panel); // добавляем панель с FX компонентами
+        frame.add(jPanel); // добавляем панель на фрэйм
+
         frame.setSize(400,200); // размеры
         frame.setVisible(true); // видимый
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); // выход
@@ -72,8 +57,8 @@ public class Main extends Application {
 
         moveRight.addActionListener(new ActionListener() { //добавляем обработчик событий к кнопке.
             @Override
-            public void actionPerformed(ActionEvent e) {
-                Platform.runLater(new Runnable() {
+            public void actionPerformed(ActionEvent e) { // если активировали кнопку
+                Platform.runLater(new Runnable() {// запускаем поток
                     @Override
                     public void run() {
                         double positionX = button.getLayoutX() + 2;
@@ -97,16 +82,11 @@ public class Main extends Application {
         });
     }
 
-    private static void initFX(JFXPanel panel){
-        Scene scene = createScene(); // создаем сцену
-        panel.setScene(scene); // добавляем на панель
-    }
-
     private static Scene createScene(){ // создание сцены
         Group root = new Group(); // тут всё по анологии, панель(лайяут)
-        Scene scene = new Scene(root,200,200, Color.YELLOW); // сцена с панелью, цвет жёлтый
+        Scene scene = new Scene(root, Color.YELLOW); // сцена с панелью, цвет жёлтый
         Button button = new Button("Hello World!"); // кнопка
-        button.setLayoutX(50); // размеры
+        button.setLayoutX(50); // место
         button.setLayoutY(50);
 
         button.setOnAction(new EventHandler<javafx.event.ActionEvent>() { // перехвачиваем событие клика.
@@ -125,5 +105,21 @@ public class Main extends Application {
         return scene; // вернуть панель
     }
 
+    private static void initFX(JFXPanel panel){
+        Scene scene = createScene(); // создаем сцену
+        panel.setScene(scene); // добавляем на панель
+    }
+
+    public static void main(String[] args) {
+        //launch(args);
+
+        // Метод invokeLater говорит, что нужно обновить GUI поток. Он будет выполняться асинхронно с AWT.
+        SwingUtilities.invokeLater(new Runnable() { //с новым поток
+            @Override
+            public void run() {
+                show(); // запускаем метод show
+            }
+        });
+    }
 }
 
